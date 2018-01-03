@@ -6,9 +6,10 @@
  */
 
 #include <iostream>
+#include <vector>
+
 #include <algorithm>
 #include <random>
-#include <vector>
 
 const char boggleDice[16][6] = {
 	{'M','E','D','A','P','C'},
@@ -29,7 +30,9 @@ const char boggleDice[16][6] = {
 	{'E','V','I','T','G','N'}
 };
 
-void printBoard() {
+char **newBoard() {
+
+	char **boggleBoard = new char[4][4];
 
 	auto rng = std::default_random_engine {};
 	rng.seed(time(NULL));
@@ -37,19 +40,18 @@ void printBoard() {
 	std::vector<int> diceOrder;
 	for(int i = 0; i < 16; i++) diceOrder.push_back(i);
 
-	for(int i = 0; i < 16; i++) std::cout << diceOrder[i] << " ";
-	std::cout << "\n";
-
 	std::shuffle(std::begin(diceOrder), std::end(diceOrder), rng);
 
-	for(int i = 0; i < 16; i++) std::cout << diceOrder[i] << " ";
-	std::cout << "\n";
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; j++) {
+			boggleBoard[i][j] = boggleDice[diceOrder[4*i+j]][
+	//for(int i = 0; i < 16; i++) std::cout << diceOrder[i] << " ";
+	//std::cout << "\n";
 
 }
 	
 int main(int argc, char **argv) {
 
-	std::srand(unsigned(time(NULL)));
 	printBoard();
 
 	return 0;
