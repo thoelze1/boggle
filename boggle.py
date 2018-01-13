@@ -30,9 +30,9 @@ boggleDice = [
 graph = []
 
 def randomBoard():
-	diceOrder = list(range(16))
+	diceOrder = list(range(m*n))
 	random.shuffle(diceOrder)
-	return [[random.choice(boggleDice[diceOrder[4*i+j]]) for j in range(4)] for i in range(4)]
+	return [[random.choice(boggleDice[diceOrder[n*i+j]%len(boggleDice)]) for j in range(n)] for i in range(m)]
 
 def printBoard(boggleBoard):
 	for row in boggleBoard:
@@ -58,28 +58,28 @@ def boggleable(word, letters):
 def makeBoggleGraph():
 	g = []
 	for k in range(m * n):
-		line = m * n * [0]
+		row = m * n * [0]
 		# Horizontal gridlines
 		if ((k + 1) % n) != 0:
-			line[k+1] = 1
+			row[k+1] = 1
 		if (k % n) != 0:
-			line[k-1] = 1
+			row[k-1] = 1
 		# Vertical gridlines
 		if (k + n) < (m * n):
-			line[k+n] = 1
+			row[k+n] = 1
 		if (k - n) >= 0:
-			line[k-n] = 1
+			row[k-n] = 1
 		# \ diagonals
 		if (k % n) != (n - 1) and k < ((m-1) * n):
-			line[k+n+1] = 1
+			row[k+n+1] = 1
 		if (k % n) != 0 and k >= n:
-			line[k-n-1] = 1
+			row[k-n-1] = 1
 		# / diagonals
 		if (k % n) != (n - 1) and k >= n:
-			line[k-n+1] = 1
+			row[k-n+1] = 1
 		if (k % n) != 0 and k < (m-1) * n:
-			line[k+n-1] = 1
-		g.append(line)
+			row[k+n-1] = 1
+		g.append(row)
 	return g
 
 def getWordSpace(letters):
@@ -101,7 +101,7 @@ def dfs(letters, wordSpace, path):
 	else:
 		if currWord in wordSpace:
 			words.append(currWord)
-	for i in range(16):
+	for i in range(m*n):
 		if graph[path[-1]][i] == 1 and i not in path:
 			newPath = list(path)
 			newPath.append(i)
@@ -115,13 +115,18 @@ def bruteForce(board):
 	wordSpace = getWordSpace(letters)
 	# Find words with DFS search
 	words = []
-	for v in range(16):
+	for v in range(m*n):
 		words.extend(dfs(letters, wordSpace, [v]))
 	words = list(set(words))
 	words.sort(key=len, reverse=True)
 	return words
 
 def main():
+	# Get dimensions
+	global m
+	global n
+	m = int(input())
+	n = int(input())
 	# Make grid graph with diagonals
 	global graph
 	graph = makeBoggleGraph()
