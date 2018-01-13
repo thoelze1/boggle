@@ -2,6 +2,7 @@
 # https://math.stackexchange.com/questions/92555/counting-the-number-of-paths-on-a-graph
 
 import random
+import sys
 
 # Language parameters
 wordsFilePath = "/usr/share/dict/words"
@@ -89,52 +90,59 @@ def getWordSpace(letters):
 	return words
 
 def dfs(letters, wordSpace, path):
-	words = []
+	# Start a list of new words
+	newWords = []
+	# Construct the word represented by the current path
 	currWord = ''.join([letters[i] for i in path])
+	# Determine if the path is promising by checking if any
+	# possible words start with the current word
 	promising = False
 	for word in wordSpace:
 		if word.startswith(currWord):
 			promising = True
 			break
 	if not promising:
-		return words 
+		return []
 	else:
 		if currWord in wordSpace:
-			words.append(currWord)
+			newWords.append(currWord)
+	# Continue dfs with each adjacent letter
 	for i in range(m*n):
 		if graph[path[-1]][i] == 1 and i not in path:
 			newPath = list(path)
 			newPath.append(i)
-			words.extend(dfs(letters, wordSpace, newPath))
-	return words
+			newWords.extend(dfs(letters, wordSpace, newPath))
+	return newWords
 
 def bruteForce(board):
 	# List of Letters
 	letters = [letter for row in board for letter in row]
-	# Get possible words
+	# Get all words that can be spelled with the letters on the board in any order
 	wordSpace = getWordSpace(letters)
-	# Find words with DFS search
+	# Find present words with DFS search. Start at each vertex in turn and add new words.
 	words = []
 	for v in range(m*n):
 		words.extend(dfs(letters, wordSpace, [v]))
+	# Remove duplicates and sort by descending length
 	words = list(set(words))
 	words.sort(key=len, reverse=True)
 	return words
 
 def main():
-	# Get dimensions
-	global m
-	global n
-	m = int(input())
-	n = int(input())
-	# Make grid graph with diagonals
+	# If user specified board dimensions, set them
+	if len(sys.argv) == 3:
+		global m
+		global n
+		m = int(sys.argv[1])
+		n = int(sys.argv[2])
+	# Make adjacency graph representing a grid graph with diagonals
 	global graph
 	graph = makeBoggleGraph()
-	# Square Boggle Board
+	# Make a random boggle board
 	board = randomBoard()
-	# Find all words
+	# Find all words present in the boggle board
 	words = bruteForce(board)
-	# Print results!
+	# Print the results!
 	printBoard(board)
 	print()
 	for word in words:
