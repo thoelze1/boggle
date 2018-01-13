@@ -2,7 +2,7 @@
 
 ## To Run
 ```
-python3 boggle.py 4 4
+$ python3 boggle.py 4 4
 ```
 
 ## Background
