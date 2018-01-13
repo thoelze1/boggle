@@ -29,6 +29,12 @@ boggleDice = [
 	['E','V','I','T','G','N']
 ]
 graph = []
+coverBoard = [
+	['G','A','U','T'],
+	['P','R','M','R'],
+	['D','O','L','A'],
+	['E','S','I','C']
+]
 
 def randomBoard():
 	diceOrder = list(range(m*n))
