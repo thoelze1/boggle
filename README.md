@@ -3,7 +3,7 @@
 ## Background
 While playing Boggle over the holidays I decided to write a program to help me get the high score. Boggle is a board game where players earn points by finding words in a randomized 4 by 4 grid of letters. Valid words are found by connecting at least 3 adjacent letters (diagonals are allowed, but letter reuse is not).  
 
-![alt text](https://github.com/thoelze1/boggle/boggle.jpg "Boggle Board Game")
+![alt text](boggle.jpg "Boggle Board Game")
 
 ## The General Problem
 In general, Boggle is a specific case of a word search in a grid of letters. The traditional word search (where words must follow a linear path) is another such case. Other cases exist where letter reuse is allowed or where the grid is three dimensional. In this repo, I will limit scope only to solving Boggle on an m by n board.
