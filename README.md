@@ -1,9 +1,9 @@
 # Get the High Score in Boggle
 
 ## To Run
-'''
+```
 python3 boggle.py 4 4
-'''
+```
 
 ## Background
 While playing Boggle over the holidays I decided to write a program to help me get the high score. Boggle is a board game where players earn points by finding words in a randomized 4 by 4 grid of letters. Valid words are found by connecting at least 3 adjacent letters (diagonal adjacency is valid, but letter reuse is not).  
