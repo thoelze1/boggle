@@ -3,8 +3,12 @@
 
 import random
 
+# Language parameters
 wordsFilePath = "/usr/share/dict/words"
 
+# Boggle parameters
+m = 4
+n = 4
 boggleDice = [
 	['M','E','D','A','P','C'],
 	['L','E','K','G','U','Y'],
@@ -23,27 +27,9 @@ boggleDice = [
 	['R','W','G','L','I','U'],
 	['E','V','I','T','G','N']
 ]
+graph = []
 
-A = [
-	[0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0],
-	[0,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0],
-	[0,0,0,1,0,1,1,1,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[]
-]
-
-def makeBoard():
+def randomBoard():
 	diceOrder = list(range(16))
 	random.shuffle(diceOrder)
 	return [[random.choice(boggleDice[diceOrder[4*i+j]]) for j in range(4)] for i in range(4)]
@@ -69,10 +55,8 @@ def boggleable(word, letters):
 			return False
 	return True
 
-def boggleGraph():
-	m = 4
-	n = 4
-	graph = []
+def makeBoggleGraph():
+	g = []
 	for k in range(m * n):
 		line = m * n * [0]
 		# Horizontal gridlines
@@ -95,21 +79,61 @@ def boggleGraph():
 			line[k-n+1] = 1
 		if (k % n) != 0 and k < (m-1) * n:
 			line[k+n-1] = 1
-		graph.append(line)
-		print(line)
-	return graph
+		g.append(line)
+	return g
 
-def main():
-	# Square Boggle Board
-	board = makeBoard()
-	# List of Letters
-	letters = [letter for row in board for letter in row]
-	# Make grid graph with diagonals
-	graph = boggleGraph()
-	# Get possible words
+def getWordSpace(letters):
 	words = []
 	with open(wordsFilePath, "r") as wordsFile:
 		words = [w.upper() for w in wordsFile.read().splitlines() if boggleable(w,list(letters))]
+	return words
+
+def dfs(letters, wordSpace, path):
+	words = []
+	currWord = ''.join([letters[i] for i in path])
+	promising = False
+	for word in wordSpace:
+		if word.startswith(currWord):
+			promising = True
+			break
+	if not promising:
+		return words 
+	else:
+		if currWord in wordSpace:
+			words.append(currWord)
+	for i in range(16):
+		if graph[path[-1]][i] == 1 and i not in path:
+			newPath = list(path)
+			newPath.append(i)
+			words.extend(dfs(letters, wordSpace, newPath))
+	return words
+
+def bruteForce(board):
+	# List of Letters
+	letters = [letter for row in board for letter in row]
+	# Get possible words
+	wordSpace = getWordSpace(letters)
+	# Find words with DFS search
+	words = []
+	for v in range(16):
+		words.extend(dfs(letters, wordSpace, [v]))
+	words = list(set(words))
+	words.sort(key=len, reverse=True)
+	return words
+
+def main():
+	# Make grid graph with diagonals
+	global graph
+	graph = makeBoggleGraph()
+	# Square Boggle Board
+	board = randomBoard()
+	# Find all words
+	words = bruteForce(board)
+	# Print results!
+	printBoard(board)
+	print()
+	for word in words:
+		print(word)
 
 if __name__ == "__main__":
 	main()
