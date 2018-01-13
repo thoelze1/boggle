@@ -149,9 +149,10 @@ def main():
 	# Find all words present in the boggle board
 	words = bruteForce(board)
 	# Print the results!
+	print('Board:')
 	printBoard(board)
-	print()
-	for word in words:
+	print('\nLongest 5 words:')
+	for word in words[:5]:
 		print(word)
 
 if __name__ == "__main__":
