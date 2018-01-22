@@ -35,6 +35,12 @@ coverBoard = [
 	['D','O','L','A'],
 	['E','S','I','C']
 ]
+currBoard = [
+	['N','U','E','E'],
+	['A','K','E','A'],
+	['E','A','M','M'],
+	['R','N','I','O']
+]
 
 def randomBoard():
 	diceOrder = list(range(m*n))
@@ -145,14 +151,14 @@ def main():
 	global graph
 	graph = makeBoggleGraph()
 	# Make a random boggle board
-	board = randomBoard()
+	board = currBoard
 	# Find all words present in the boggle board
 	words = bruteForce(board)
 	# Print the results!
 	print('Board:')
 	printBoard(board)
 	print('\nLongest 5 words:')
-	for word in words[:5]:
+	for word in words[:10]:
 		print(word)
 
 if __name__ == "__main__":
