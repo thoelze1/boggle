@@ -6,7 +6,7 @@ $ python3 boggle.py 4 4
 ```
 
 ## Background
-While playing Boggle over the holidays I decided to write a program to help me get the high score. Boggle is a board game where players earn points by finding words in a randomized 4 by 4 grid of letters. Valid words are found by connecting at least 3 adjacent letters (diagonal adjacency is valid, but letter reuse is not).  
+While playing Boggle over the holidays I decided to write a program to help me get the high score. Boggle is a board game where players earn points by finding words in a randomized 4 by 4 grid of letters. Valid words are found by connecting at least 3 adjacent letters (diagonal adjacency is valid, letter reuse is not).  
 
 ![alt text](boggle.jpg "Boggle Board Game")
 
@@ -22,3 +22,5 @@ This brute force method successfully solves 4 by 4 Boggle boards in less than a 
 
 ## Future Work
 I plan to develop a faster solution. My current work takes several seconds to solve a 5 by 5 Boggle board. I imagine using dynamic programming to build partial solutions (paths of length i) bottom-up by storing paths and pruning those that are not present in any English words (such as "xyz").
+
+I also plan to explore using different data structures. I could use a trie to store english words. For now, I should use a set instead of a list to store english words so that lookup time is constant.
